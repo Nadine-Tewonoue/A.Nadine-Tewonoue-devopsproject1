@@ -15,7 +15,8 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 .terraform/
-vpc-creation/
+
+
 
 # Exclude Terraform variable files with sensitive data
 *.tfvars
