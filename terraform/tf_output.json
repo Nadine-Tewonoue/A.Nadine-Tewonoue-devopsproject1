@@ -12,7 +12,7 @@
   "frontend_public_ip": {
     "sensitive": false,
     "type": "string",
-    "value": "18.159.59.192"
+    "value": "18.199.141.251"
   },
   "internet_gateway_id": {
     "sensitive": false,
