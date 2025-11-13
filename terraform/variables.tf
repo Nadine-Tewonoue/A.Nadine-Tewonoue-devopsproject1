@@ -9,11 +9,16 @@ variable "environment" {
   type        = string
   default     = "development"
 }
+variable "availability_zone" {
+  description = "AWS availability zone for subnet placement"
+  type        = string
+  default     = "eu-central-1"
+}
 
 variable "project_name" {
   description = "Project name prefix"
   type        = string
-  default     = "Nadine_project1"
+  default     = "Nadine_dev"
 }
 
 variable "vpc_cidr" {
@@ -22,34 +27,30 @@ variable "vpc_cidr" {
   default     = "10.0.0.0/16"
 }
 
-variable "public_subnet_cidr" {
+variable "public_subnet_id" {
   description = "CIDR block for public subnet"
   type        = string
   default     = "10.0.1.0/24"
 }
 
-variable "private_subnet_cidr" {
+variable "private_subnet_id" {
   description = "CIDR block for private subnet"
   type        = string
   default     = "10.0.2.0/24"
 }
 
-variable "public_key" {
-  description = "SSH public key content"
-  type        = string
-}
 
-variable "public_key-name" {
+
+variable "key_pair_name" {
   description = "SSH public key content"
   type        = string
-  default =  "project1-key-nadine.pem"
+
 }
 
 
 variable "ami_id" {
   description = "Amazon Linux 2023 AMI ID for eu-central-1"
   type        = string
-  default     = "ami-089a7a2a13629ecc4"
 }
 
 variable "instance_type" {
