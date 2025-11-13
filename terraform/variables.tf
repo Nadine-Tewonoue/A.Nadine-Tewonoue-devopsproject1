@@ -58,3 +58,7 @@ variable "instance_type" {
   type        = string
   default     = "t3.micro"
 }
+variable "my_ip" {
+  description = "ssh puplic ip"
+  type        = string
+}

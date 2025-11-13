@@ -32,15 +32,11 @@ terraform validate
 echo "✨ Formatting Terraform files..."
 terraform fmt -recursive
 
-# 5️⃣ Show plan
-echo " Generating Terraform plan..."
-terraform plan -var-file="$TF_VARS_FILE" -out=tfplan
+terraform plan  -var-file="$TF_VARS_FILE" -out=tfplan
 
-# 6️⃣ Apply infrastructure
-echo " Applying Terraform configuration..."
+# 5️⃣ Apply
 terraform apply -input=false -auto-approve tfplan
 
-# 7️⃣ Output key resources
 echo " Retrieving important outputs..."
 terraform output
 

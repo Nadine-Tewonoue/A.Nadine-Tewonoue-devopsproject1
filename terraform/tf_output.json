@@ -2,17 +2,17 @@
   "backend_private_ip": {
     "sensitive": false,
     "type": "string",
-    "value": "10.0.2.185"
+    "value": "10.0.2.243"
   },
   "database_private_ip": {
     "sensitive": false,
     "type": "string",
-    "value": "10.0.2.109"
+    "value": "10.0.2.239"
   },
   "frontend_public_ip": {
     "sensitive": false,
     "type": "string",
-    "value": "18.199.84.232"
+    "value": "18.159.59.192"
   },
   "internet_gateway_id": {
     "sensitive": false,

@@ -18,6 +18,7 @@ override.tf.json
 # Exclude Terraform variable files with sensitive data
 *.tfvars
 *.tfvars.json
+tf_output.json
 
 # Exclude CLI configuration files
 .terraformrc
