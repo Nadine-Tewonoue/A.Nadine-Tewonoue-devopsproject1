@@ -7,8 +7,7 @@ crash.*.log
 # Terraform variable files containing secrets
 *.tfvars
 *.tfvars.json
-*.json
-variables.tf
+
 # Ignore all .terraform folders everywhere
 .terraform/
 **/.terraform/
