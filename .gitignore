@@ -1,5 +1,30 @@
+# Terraform local state
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Terraform variable files containing secrets
+*.tfvars
+*.tfvars.json
+
+# Ignore all .terraform folders everywhere
 .terraform/
 **/.terraform/
-*.tfstate
-*.tfvars
 
+# Ignore Terraform lock file (optional)
+.terraform.lock.hcl
+
+# Ignore sensitive AWS key files
+*.pem
+*.key
+
+# Local environment files
+.env
+.env.*
+
+# macOS system files
+.DS_Store
+
+# VSCode folder
+.vscode/
