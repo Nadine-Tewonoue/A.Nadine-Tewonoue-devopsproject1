@@ -1,0 +1,37 @@
+{
+  "backend_private_ip": {
+    "sensitive": false,
+    "type": "string",
+    "value": "10.0.2.243"
+  },
+  "database_private_ip": {
+    "sensitive": false,
+    "type": "string",
+    "value": "10.0.2.239"
+  },
+  "frontend_public_ip": {
+    "sensitive": false,
+    "type": "string",
+    "value": "18.159.59.192"
+  },
+  "internet_gateway_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "igw-068ee075002acae3a"
+  },
+  "private_subnet_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "subnet-0a4a78fb19eb5408b"
+  },
+  "public_subnet_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "subnet-02a21532c5625b410"
+  },
+  "vpc_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "vpc-01f70d30a7e2fd48f"
+  }
+}
