@@ -8,7 +8,6 @@ crash.*.log
 *.tfvars
 *.tfvars.json
 *.json
-variables.tf
 # Ignore all .terraform folders everywhere
 .terraform/
 **/.terraform/
