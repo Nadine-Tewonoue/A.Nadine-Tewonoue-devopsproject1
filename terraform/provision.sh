@@ -16,7 +16,7 @@ echo "----------------------------------------------"
 
 # 1️-Ensure Terraform is installed
 if ! command -v terraform &>/dev/null; then
-  echo "❌ Terraform not found! Please install Terraform first."
+  echo "Terraform not found! Please install Terraform first."
   exit 1
 fi
 

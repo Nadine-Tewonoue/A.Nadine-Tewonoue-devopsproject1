@@ -86,7 +86,7 @@ resource "aws_route_table_association" "public_assoc" {
 # SECURITY GROUPS
 # ----------------------------------------------------------------------
 
-# 1️⃣ Public SG (Vote + Result)
+#  Public SG (Vote + Result)
 resource "aws_security_group" "public_sg" {
   name        = "${var.project_name}-public-sg"
   description = "Allow HTTP/HTTPS from the internet"
@@ -127,7 +127,7 @@ resource "aws_security_group" "public_sg" {
   }
 }
 
-# 2️⃣ Private SG (Redis + Worker)
+# 2️ Private SG (Redis + Worker)
 resource "aws_security_group" "private_sg" {
   name        = "${var.project_name}-private-sg"
   description = "Allow traffic from Public SG to Redis, and outbound to DB"
@@ -141,7 +141,7 @@ resource "aws_security_group" "private_sg" {
     security_groups = [aws_security_group.public_sg.id]
   }
 
-  # Allow all outbound (can be narrowed to Postgres later)
+  # Allow all outbound 
   egress {
     from_port   = 0
     to_port     = 0
@@ -154,7 +154,7 @@ resource "aws_security_group" "private_sg" {
   }
 }
 
-# 3️⃣ Database SG (PostgreSQL)
+# 3️ Database SG (PostgreSQL)
 resource "aws_security_group" "database_sg" {
   name        = "${var.project_name}-database-sg"
   description = "Allow PostgreSQL only from private SG"
