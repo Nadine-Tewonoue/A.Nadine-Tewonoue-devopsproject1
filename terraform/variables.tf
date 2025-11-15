@@ -1,18 +1,18 @@
 variable "aws_region" {
   description = "AWS region"
   type        = string
-  
+
 }
 
 variable "environment" {
   description = "Environment name"
   type        = string
-  
+
 }
 variable "availability_zone" {
   description = "AWS availability zone for subnet placement"
   type        = string
-  
+
 }
 
 variable "project_name" {
@@ -24,7 +24,7 @@ variable "project_name" {
 variable "vpc_cidr" {
   description = "CIDR block for VPC"
   type        = string
-  
+
 }
 
 variable "public_subnet_id" {
@@ -36,7 +36,7 @@ variable "public_subnet_id" {
 variable "private_subnet_id" {
   description = "CIDR block for private subnet"
   type        = string
-  
+
 }
 
 
@@ -56,5 +56,5 @@ variable "ami_id" {
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
-  
+
 }
