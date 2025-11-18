@@ -83,15 +83,14 @@ resource "aws_route_table_association" "public_assoc" {
 }
 
 # ----------------------------------------------------------------------
-# SECURITY GROUPS
+#  Public SG (Frontend / Vote + Result)
 # ----------------------------------------------------------------------
-
-#  Public SG (Vote + Result)
 resource "aws_security_group" "public_sg" {
   name        = "${var.project_name}-public-sg"
-  description = "Allow HTTP/HTTPS from the internet"
+  description = "Allow HTTP/HTTPS/SSH from the internet"
   vpc_id      = aws_vpc.project1_vpc.id
 
+  # Allow HTTP
   ingress {
     description = "Allow HTTP from anywhere"
     from_port   = 80
@@ -100,6 +99,7 @@ resource "aws_security_group" "public_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Allow HTTPS
   ingress {
     description = "Allow HTTPS from anywhere"
     from_port   = 443
@@ -107,14 +107,17 @@ resource "aws_security_group" "public_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  # Allow SSH from anywhere (or limit to your IP)
   ingress {
+    description = "Allow SSH from anywhere"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-
+  # Allow all outbound
   egress {
     from_port   = 0
     to_port     = 0
@@ -123,25 +126,37 @@ resource "aws_security_group" "public_sg" {
   }
 
   tags = {
-    Name = "Vote-Result-SG"
+    Name = "Vote-Public-SG"
   }
 }
 
-# 2️ Private SG (Redis + Worker)
+# ----------------------------------------------------------------------
+# 2️⃣ Private SG (Backend / Worker)
+# ----------------------------------------------------------------------
 resource "aws_security_group" "private_sg" {
   name        = "${var.project_name}-private-sg"
-  description = "Allow traffic from Public SG to Redis, and outbound to DB"
+  description = "Allow traffic from frontend SG and outbound access"
   vpc_id      = aws_vpc.project1_vpc.id
 
+  # Allow Redis access from frontend
   ingress {
-    description     = "Allow Redis access from Public SG"
+    description     = "Allow Redis access from frontend SG"
     from_port       = 6379
     to_port         = 6379
     protocol        = "tcp"
     security_groups = [aws_security_group.public_sg.id]
   }
 
-  # Allow all outbound 
+  # Allow SSH from frontend
+  ingress {
+    description     = "Allow SSH from frontend SG"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.public_sg.id]
+  }
+
+  # Allow all outbound
   egress {
     from_port   = 0
     to_port     = 0
@@ -150,24 +165,37 @@ resource "aws_security_group" "private_sg" {
   }
 
   tags = {
-    Name = "Redis-Worker-SG"
+    Name = "Backend-Private-SG"
   }
 }
 
-# 3️ Database SG (PostgreSQL)
+# ----------------------------------------------------------------------
+# 3️⃣ Database SG (PostgreSQL)
+# ----------------------------------------------------------------------
 resource "aws_security_group" "database_sg" {
   name        = "${var.project_name}-database-sg"
-  description = "Allow PostgreSQL only from private SG"
+  description = "Allow PostgreSQL only from private SG and SSH from frontend"
   vpc_id      = aws_vpc.project1_vpc.id
 
+  # Allow PostgreSQL from private SG
   ingress {
-    description     = "Allow PostgreSQL access from Private SG"
+    description     = "Allow PostgreSQL from private SG"
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
     security_groups = [aws_security_group.private_sg.id]
   }
 
+  # Optional: Allow SSH from frontend SG
+  ingress {
+    description     = "Allow SSH from frontend SG"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.public_sg.id]
+  }
+
+  # Allow all outbound
   egress {
     from_port   = 0
     to_port     = 0
@@ -176,9 +204,10 @@ resource "aws_security_group" "database_sg" {
   }
 
   tags = {
-    Name = "Postgres-SG"
+    Name = "Database-SG"
   }
 }
+
 
 # ----------------------------------------------------------------------
 # EC2 Instances
