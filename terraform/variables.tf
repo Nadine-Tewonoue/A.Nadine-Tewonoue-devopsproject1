@@ -14,7 +14,11 @@ variable "availability_zone" {
   type        = string
 
 }
+variable "availability_zone2" {
+  description = "AWS availability zone for subnet placement"
+  type        = string
 
+}
 variable "project_name" {
   description = "Project name prefix"
   type        = string
@@ -38,7 +42,11 @@ variable "private_subnet_id" {
   type        = string
 
 }
+variable "private_subnet2_id" {
+  description = "CIDR block for private subnet"
+  type        = string
 
+}
 
 
 variable "key_pair_name" {
