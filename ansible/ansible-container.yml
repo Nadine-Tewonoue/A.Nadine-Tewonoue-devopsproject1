@@ -1,0 +1,92 @@
+---
+- name: Install and run containers on all instances
+  hosts: all
+  become: yes
+  vars:
+    username: "anne2693"
+    image_map:
+      frontend-instance-1:
+        - image: "anne2693/voting-app:latest"
+          name: "vote"
+          ports: "80:80"
+          env:
+            REDIS_HOST: "10.0.2.74" 
+            REDIS_PORT: "6379"
+        - image: "anne2693/result-app:latest" 
+          name: "result"
+          ports: "81:80"
+          env:
+            PG_HOST: "10.0.2.193"
+            PG_USER: "postgres"
+            PG_PASSWORD: "postgres"
+            PG_NAME: "postgres"
+            PG_PORT: "5432"
+      backend-instance-1:
+        - image: "redis"
+          name: "redis"
+          ports: "6379:6379"
+        - image: "anne2693/worker-app:latest"
+          name: "worker"
+          env:
+            REDIS_HOST: "redis"
+            DB_HOST:  "10.0.2.193"
+            DB_USER: "postgres"
+            DB_PASSWORD: "postgres"
+            DB_NAME: "postgres"
+      db-instance-1:
+        - image: "postgres"
+          name: "postgres"
+          ports: "5432:5432"
+          env:
+            POSTGRES_PASSWORD: "postgres"
+            POSTGRES_DB: "postgres"
+            POSTGRES_USER: "postgres"
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      package:
+        name: docker.io
+        state: present
+
+    - name: Ensure docker is running
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add user ubuntu to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Pull Docker images for this host (supports multiple)
+      community.docker.docker_image:
+        name: "{{ item.image }}"
+        tag: latest
+        source: pull
+      loop: "{{ image_map[inventory_hostname] }}"
+      when: image_map[inventory_hostname] is defined
+
+    - name: Create Docker network for backend only
+      docker_network:
+        name: backend_network
+        state: present
+      when: inventory_hostname == "backend-instance-1"
+
+    - name: Run containers for this host (supports multiple)
+      community.docker.docker_container:
+        name: "{{ item.name }}"
+        image: "{{ item.image }}"
+        ports: "{{ item.ports | default(omit) }}"
+        env: "{{ item.env | default(omit) }}"
+        state: started
+        restart_policy: always
+        networks:
+          - name: "{{ 'backend_network' if inventory_hostname == 'backend-instance-1' else 'bridge' }}"
+      loop: "{{ image_map[inventory_hostname] }}"
+      when: image_map[inventory_hostname] is defined
